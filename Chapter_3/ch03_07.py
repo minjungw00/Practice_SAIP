@@ -4,25 +4,25 @@ import yfinance as yf
 from scipy import stats
 import matplotlib.pyplot as plt
 
-# yfinance ÆĞÅ°Áö¸¦ ÅëÇØ ¾ßÈÄ ÆÄÀÌ³½½º¿¡¼­ Á¦°øÇÏ´Â ´Ù¿ìÁ¸½º Áö¼ö¿Í ÄÚ½ºÇÇ Áö¼ö µ¥ÀÌÅÍ ´Ù¿î·Îµå
+# yfinance íŒ¨í‚¤ì§€ë¥¼ í†µí•´ ì•¼í›„ íŒŒì´ë‚¸ìŠ¤ì—ì„œ ì œê³µí•˜ëŠ” ë‹¤ìš°ì¡´ìŠ¤ ì§€ìˆ˜ì™€ ì½”ìŠ¤í”¼ ì§€ìˆ˜ ë°ì´í„° ë‹¤ìš´ë¡œë“œ
 yf.pdr_override()
 
 dow = pdr.get_data_yahoo('^DJI', '2000-01-04')
 kospi = pdr.get_data_yahoo('^KS11', '2000-01-04')
 
-# µÎ Áö¼öÀÇ Á¾°¡ Ä®·³À¸·Î µ¥ÀÌÅÍÇÁ·¹ÀÓÀ» »ı¼ºÇÑ ÈÄ NaN Á¦°Å
+# ë‘ ì§€ìˆ˜ì˜ ì¢…ê°€ ì¹¼ëŸ¼ìœ¼ë¡œ ë°ì´í„°í”„ë ˆì„ì„ ìƒì„±í•œ í›„ NaN ì œê±°
 df = pd.DataFrame({'X': dow['Close'], 'Y': kospi['Close']})
 df = df.fillna(method='bfill')
 df = df.fillna(method='ffill')
 
-# scipy ÆĞÅ°Áö¸¦ ÅëÇØ ´Ù¿ìÁ¸½º Áö¼ö X¿¡¼­ ÄÚ½ºÇÇ Áö¼ö Y·ÎÀÇ ¼±ÇüÈ¸±Í ¸ğµ¨ °´Ã¼ »ı¼º
+# scipy íŒ¨í‚¤ì§€ë¥¼ í†µí•´ ë‹¤ìš°ì¡´ìŠ¤ ì§€ìˆ˜ Xì—ì„œ ì½”ìŠ¤í”¼ ì§€ìˆ˜ Yë¡œì˜ ì„ í˜•íšŒê·€ ëª¨ë¸ ê°ì²´ ìƒì„±
 regr = stats.linregress(df.X, df.Y)
 regr_line = f'Y = {regr.slope:.2f} * X + {regr.intercept:.2f}'
 
-# È¸±Í ºĞ¼® ¸ğµ¨ ½Ã°¢È­
+# íšŒê·€ ë¶„ì„ ëª¨ë¸ ì‹œê°í™”
 plt.figure(figsize=(7, 7))
-plt.plot(df.X, df.Y, '.') # »êÁ¡µµ Ãâ·Â
-plt.plot(df.X, regr.slope * df.X + regr.intercept, 'r') # È¸±Í¼± Ãâ·Â
+plt.plot(df.X, df.Y, '.') # ì‚°ì ë„ ì¶œë ¥
+plt.plot(df.X, regr.slope * df.X + regr.intercept, 'r') # íšŒê·€ì„  ì¶œë ¥
 plt.legend(['DOW x KOSPI', regr_line])
 plt.title(f'DOW x KOSPI (R = {regr.rvalue:.2f})')
 plt.xlabel('Dow Jones Industrial Average')

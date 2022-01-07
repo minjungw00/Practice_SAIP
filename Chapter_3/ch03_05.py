@@ -2,17 +2,17 @@ from pandas_datareader import data as pdr
 import yfinance as yf
 import matplotlib.pyplot as plt
 
-# yfinance ÆĞÅ°Áö¸¦ ÅëÇØ ¾ßÈÄ ÆÄÀÌ³½½º¿¡¼­ Á¦°øÇÏ´Â KOSPI Áö¼ö µ¥ÀÌÅÍ ´Ù¿î·Îµå
+# yfinance íŒ¨í‚¤ì§€ë¥¼ í†µí•´ ì•¼í›„ íŒŒì´ë‚¸ìŠ¤ì—ì„œ ì œê³µí•˜ëŠ” KOSPI ì§€ìˆ˜ ë°ì´í„° ë‹¤ìš´ë¡œë“œ
 yf.pdr_override()
 
 kospi = pdr.get_data_yahoo('^KS11', '2004-01-04')
 
-window = 252 # »êÁ¤ ±â°£, 1³â µ¿¾ÈÀÇ °³ÀåÀÏÀ» ¾î¸²Àâ¾Æ 252ÀÏ·Î ¼³Á¤
-peak = kospi['Adj Close'].rolling(window, min_periods=1).max() # »êÁ¤ ±â°£ Áß ÃÖ°íÄ¡
-drawdown = kospi['Adj Close']/peak - 1.0 # ÃÖ°íÄ¡ ´ëºñ ÇÏ¶ô·ü
-max_dd = drawdown.rolling(window, min_periods=1).min() # »êÁ¤ ±â°£ Áß ÃÖÀúÄ¡
+window = 252 # ì‚°ì • ê¸°ê°„, 1ë…„ ë™ì•ˆì˜ ê°œì¥ì¼ì„ ì–´ë¦¼ì¡ì•„ 252ì¼ë¡œ ì„¤ì •
+peak = kospi['Adj Close'].rolling(window, min_periods=1).max() # ì‚°ì • ê¸°ê°„ ì¤‘ ìµœê³ ì¹˜
+drawdown = kospi['Adj Close']/peak - 1.0 # ìµœê³ ì¹˜ ëŒ€ë¹„ í•˜ë½ë¥ 
+max_dd = drawdown.rolling(window, min_periods=1).min() # ì‚°ì • ê¸°ê°„ ì¤‘ ìµœì €ì¹˜
 
-# matplotlib ÆĞÅ°Áö¸¦ ÅëÇØ MDD Ãâ·Â
+# matplotlib íŒ¨í‚¤ì§€ë¥¼ í†µí•´ MDD ì¶œë ¥
 plt.figure(figsize=(9, 7))
 plt.subplot(211)
 kospi['Close'].plot(label='KOSPI', title='KOSPI MDD', grid=True, legend=True)

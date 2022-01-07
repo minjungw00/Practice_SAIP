@@ -3,18 +3,18 @@ from pandas_datareader import data as pdr
 import yfinance as yf
 import matplotlib.pyplot as plt
 
-# yfinance ÆĞÅ°Áö¸¦ ÅëÇØ ¾ßÈÄ ÆÄÀÌ³½½º¿¡¼­ Á¦°øÇÏ´Â ´Ù¿ìÁ¸½º Áö¼ö¿Í ÄÚ½ºÇÇ Áö¼ö µ¥ÀÌÅÍ ´Ù¿î·Îµå
+# yfinance íŒ¨í‚¤ì§€ë¥¼ í†µí•´ ì•¼í›„ íŒŒì´ë‚¸ìŠ¤ì—ì„œ ì œê³µí•˜ëŠ” ë‹¤ìš°ì¡´ìŠ¤ ì§€ìˆ˜ì™€ ì½”ìŠ¤í”¼ ì§€ìˆ˜ ë°ì´í„° ë‹¤ìš´ë¡œë“œ
 yf.pdr_override()
 
 dow = pdr.get_data_yahoo('^DJI', '2000-01-04')
 kospi = pdr.get_data_yahoo('^KS11', '2000-01-04')
 
-# µÎ Áö¼öÀÇ Á¾°¡ Ä®·³À¸·Î µ¥ÀÌÅÍÇÁ·¹ÀÓÀ» »ı¼ºÇÑ ÈÄ NaN Á¦°Å
+# ë‘ ì§€ìˆ˜ì˜ ì¢…ê°€ ì¹¼ëŸ¼ìœ¼ë¡œ ë°ì´í„°í”„ë ˆì„ì„ ìƒì„±í•œ í›„ NaN ì œê±°
 df = pd.DataFrame({'DOW': dow['Close'], 'KOSPI': kospi['Close']})
 df = df.fillna(method='bfill')
 df = df.fillna(method='ffill')
 
-# »êÁ¡µµ Ãâ·Â
+# ì‚°ì ë„ ì¶œë ¥
 plt.figure(figsize=(7, 7))
 plt.scatter(df['DOW'], df['KOSPI'], marker='.')
 plt.xlabel('Dow Jones Industrial Average')

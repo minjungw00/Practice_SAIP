@@ -2,22 +2,22 @@ from pandas_datareader import data as pdr
 import yfinance as yf
 import matplotlib.pyplot as plt
 
-# yfinance ÆĞÅ°Áö¸¦ ÅëÇØ ¾ßÈÄ ÆÄÀÌ³½½º¿¡¼­ Á¦°øÇÏ´Â »ï¼ºÀüÀÚ¿Í ¸¶ÀÌÅ©·Î¼ÒÇÁÆ® ÁÖ½Ä ½Ã¼¼¸¦ µ¥ÀÌÅÍÇÁ·¹ÀÓÀ¸·Î ÀÔ·Â
+# yfinance íŒ¨í‚¤ì§€ë¥¼ í†µí•´ ì•¼í›„ íŒŒì´ë‚¸ìŠ¤ì—ì„œ ì œê³µí•˜ëŠ” ì‚¼ì„±ì „ìì™€ ë§ˆì´í¬ë¡œì†Œí”„íŠ¸ ì£¼ì‹ ì‹œì„¸ë¥¼ ë°ì´í„°í”„ë ˆì„ìœ¼ë¡œ ì…ë ¥
 yf.pdr_override()
 
-# »ï¼ºÀüÀÚ µ¥ÀÌÅÍÇÁ·¹ÀÓ¿¡¼­ ÀÏ°£ º¯µ¿·ü ´©ÀûÇÕ ÃßÃâ
+# ì‚¼ì„±ì „ì ë°ì´í„°í”„ë ˆì„ì—ì„œ ì¼ê°„ ë³€ë™ë¥  ëˆ„ì í•© ì¶”ì¶œ
 sec = pdr.get_data_yahoo('005930.KS', start='2020-01-01')
 sec_dpc = (sec['Close'] / sec['Close'].shift(1) - 1) * 100
 sec_dpc.iloc[0] = 0
 sec_dpc_cs = sec_dpc.cumsum()
 
-# ¸¶ÀÌÅ©·Î¼ÒÇÁÆ® µ¥ÀÌÅÍÇÁ·¹ÀÓ¿¡¼­ ÀÏ°£ º¯µ¿·ü ´©ÀûÇÕ ÃßÃâ
+# ë§ˆì´í¬ë¡œì†Œí”„íŠ¸ ë°ì´í„°í”„ë ˆì„ì—ì„œ ì¼ê°„ ë³€ë™ë¥  ëˆ„ì í•© ì¶”ì¶œ
 msft = pdr.get_data_yahoo('MSFT', start='2020-01-01')
 msft_dpc = (msft['Close'] / msft['Close'].shift(1) - 1) * 100
 msft_dpc.iloc[0] = 0
 msft_dpc_cs = msft_dpc.cumsum()
 
-# matplotlib ÆĞÅ°Áö¸¦ ÅëÇØ ÁÖ½Ä ¼öÀÍ·ü Ãâ·Â
+# matplotlib íŒ¨í‚¤ì§€ë¥¼ í†µí•´ ì£¼ì‹ ìˆ˜ìµë¥  ì¶œë ¥
 plt.plot(sec.index, sec_dpc_cs, 'b', label='Samsung Electronics')
 plt.plot(msft.index, msft_dpc_cs, 'r--', label='Microsoft')
 plt.ylabel('Change %')

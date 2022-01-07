@@ -4,16 +4,16 @@ import hashlib
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-# requests ÆĞÅ°Áö¸¦ ÅëÇØ ÀÎÅÍ³İ¿¡¼­ ÀÌ¹ÌÁö ÆÄÀÏ °¡Á®¿À±â
+# requests íŒ¨í‚¤ì§€ë¥¼ í†µí•´ ì¸í„°ë„·ì—ì„œ ì´ë¯¸ì§€ íŒŒì¼ ê°€ì ¸ì˜¤ê¸°
 url = 'http://bit.ly/2JnsHnT'
 r = requests.get(url, stream = True).raw
 
-# pillow ÆĞÅ°Áö¸¦ ÅëÇØ ÀÌ¹ÌÁö Ãâ·Â ¹× ÀúÀå
+# pillow íŒ¨í‚¤ì§€ë¥¼ í†µí•´ ì´ë¯¸ì§€ ì¶œë ¥ ë° ì €ì¥
 img = Image.open(r)
 img.show()
 img.save('src.png')
 
-# ÀÌ¹ÌÁö ÆÄÀÏ º¹»ç
+# ì´ë¯¸ì§€ íŒŒì¼ ë³µì‚¬
 BUF_SIZE = 1024
 with open('src.png', 'rb') as sf, open('dst.png', 'wb') as df:
     while True:
@@ -22,12 +22,12 @@ with open('src.png', 'rb') as sf, open('dst.png', 'wb') as df:
             break
         df.write(data)
 
-# hashlib ÆĞÅ°Áö¸¦ ÅëÇØ ÇØ½Ã°ª È®ÀÎ
-# ÇØ½Ã °´Ã¼ »ı¼º
+# hashlib íŒ¨í‚¤ì§€ë¥¼ í†µí•´ í•´ì‹œê°’ í™•ì¸
+# í•´ì‹œ ê°ì²´ ìƒì„±
 sha_src = hashlib.sha256()
 sha_dst = hashlib.sha256()
 
-# ÇØ½Ã °´Ã¼¸¦ °¢ ÀÌ¹ÌÁö¿¡ ´ëÇÑ ÇØ½Ã°ªÀ¸·Î ¾÷µ¥ÀÌÆ®
+# í•´ì‹œ ê°ì²´ë¥¼ ê° ì´ë¯¸ì§€ì— ëŒ€í•œ í•´ì‹œê°’ìœ¼ë¡œ ì—…ë°ì´íŠ¸
 with open('src.png', 'rb') as sf, open('dst.png', 'rb') as df:
     sha_src.update(sf.read())
     sha_dst.update(df.read())
@@ -35,16 +35,16 @@ with open('src.png', 'rb') as sf, open('dst.png', 'rb') as df:
 print("src.png's hash : {}".format(sha_src.hexdigest()))
 print("dst.png's hash : {}".format(sha_dst.hexdigest()))
 
-# matplotlib ÆĞÅ°Áö¸¦ ÅëÇØ ÀÌ¹ÌÁö °¡°ø ¹× Ãâ·Â
+# matplotlib íŒ¨í‚¤ì§€ë¥¼ í†µí•´ ì´ë¯¸ì§€ ê°€ê³µ ë° ì¶œë ¥
 plt.suptitle('Image Processing', fontsize = 18)
 
-plt.subplot(1, 2, 1) # 1Çà 2¿­ÀÇ 1¹øÂ°
+plt.subplot(1, 2, 1) # 1í–‰ 2ì—´ì˜ 1ë²ˆì§¸
 plt.title('Original Image')
 plt.imshow(mpimg.imread('src.png'))
 
 plt.subplot(122)
 plt.title('Pseudocolor Image')
-# ÀÇ»ç »ö»ó Àû¿ë
+# ì˜ì‚¬ ìƒ‰ìƒ ì ìš©
 dst_img = mpimg.imread('dst.png')
 pseudo_img = dst_img[:, :, 0]
 plt.imshow(pseudo_img)
