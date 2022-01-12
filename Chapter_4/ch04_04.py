@@ -2,20 +2,20 @@ from bs4 import BeautifulSoup
 from urllib import request as req
 import pandas as pd
 
-# À¥ ºê¶ó¿ìÀú Á¤º¸ ¹× À¥ ½ºÅ©·¦ÇÎÇÒ url
+# ì›¹ ë¸Œë¼ìš°ì € ì •ë³´ ë° ì›¹ ìŠ¤í¬ë©í•‘í•  url
 headers = ("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36")
 url = 'https://finance.naver.com/item/sise_day.naver?code=005930'
 
-# request ¶óÀÌºê·¯¸®¸¦ ÅëÇØ urlÀ» ¿­ ¶§¸¶´Ù À¥ ºê¶ó¿ìÀú Á¤º¸ Á¦°ø
+# request ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ í†µí•´ urlì„ ì—´ ë•Œë§ˆë‹¤ ì›¹ ë¸Œë¼ìš°ì € ì •ë³´ ì œê³µ
 opener = req.build_opener()
 opener.addheaders = [headers]
 response = opener.open(url)
 
-# BeautifulSoup ¶óÀÌºê·¯¸®·Î ÆäÀÌÁö ÆÄ½Ì ÈÄ ÇØ´ç »çÀÌÆ®ÀÇ ¸Ç µÚ ÆäÀÌÁö ¼ıÀÚ ÃßÃâ
+# BeautifulSoup ë¼ì´ë¸ŒëŸ¬ë¦¬ë¡œ í˜ì´ì§€ íŒŒì‹± í›„ í•´ë‹¹ ì‚¬ì´íŠ¸ì˜ ë§¨ ë’¤ í˜ì´ì§€ ìˆ«ì ì¶”ì¶œ
 doc = BeautifulSoup(response, 'lxml')
 last_page = doc.find('td', class_='pgRR').a['href'].split('=')[-1]
 
-# µ¥ÀÌÅÍÇÁ·¹ÀÓÀ¸·Î °¢ ÆäÀÌÁö Á¤º¸ ÀúÀå
+# ë°ì´í„°í”„ë ˆì„ìœ¼ë¡œ ê° í˜ì´ì§€ ì •ë³´ ì €ì¥
 df = pd.DataFrame()
 for page in range(1, int(last_page) + 1):
     page_url = '{}&page={}'.format(url, page)
