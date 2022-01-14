@@ -6,17 +6,17 @@ import re
 
 class MarketDB:
     def __init__(self):
-        # 생성자: MariaDB 연결 및 종목코드 딕셔너리 생성
+        """ 생성자: MariaDB 연결 및 종목코드 딕셔너리 생성 """
         self.conn = pymysql.connect(host='localhost', user='root', password='password', db='INVESTAR', charset='utf8')
         self.codes = {}
         self.get_comp_info()
  
     def __del__(self):
-        # 소멸자: MariaDB 연결 해제
+        """ 소멸자: MariaDB 연결 해제 """
         self.conn.close()
 
     def get_comp_info(self):
-        # company_info 테이블에서 읽어와서 codes에 저장
+        """ company_info 테이블에서 읽어와서 codes에 저장 """
         sql = "SELECT * FROM company_info"
         krx = pd.read_sql(sql, self.conn)
         for idx in range(len(krx)):
@@ -86,7 +86,7 @@ class MarketDB:
             print("ValueError: Code({}) doesn't exist.".format(code))
 
         # DB에서 일별 시세 반환
-        sql = f"SELECT * FROM daily_price WHERE code = '{code}' and date >= '{start_date}' and date <= '{end_date}'"
+        sql = f"SELECT * FROM daily_price WHERE code = '{code}' and date >= '{start_date}' or date <= '{end_date}'"
         df = pd.read_sql(sql, self.conn)
         df.index = df['date']
         return df

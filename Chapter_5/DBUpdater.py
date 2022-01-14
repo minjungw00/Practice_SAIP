@@ -6,7 +6,7 @@ from threading import Timer
 
 class DBUpdater:
     def __init__(self):
-        # 생성자: MariaDB 연결 및 종목코드 딕셔너리 생성
+        """ 생성자: MariaDB 연결 및 종목코드 딕셔너리 생성 """
 
         # pymysql 라이브러리를 통해 데이터베이스 연결
         self.conn = pymysql.connect(host='localhost', user='root',
@@ -46,11 +46,11 @@ class DBUpdater:
 
 
     def __del__(self):
-        # 소멸자: MariaDB 연결 해제
+        """ 소멸자: MariaDB 연결 해제 """
         self.conn.close()
 
     def read_krx_code(self):
-        # KRX로부터 상장법인목록 파일을 읽어와서 데이터프레임으로 반환
+        """ KRX로부터 상장법인목록 파일을 읽어와서 데이터프레임으로 반환 """
 
         # 상장법인목록.xls 파일 읽기
         url = 'http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13'
@@ -63,7 +63,7 @@ class DBUpdater:
         return krx
 
     def update_comp_info(self):
-        # 종목코드를 company_info 테이블에 업데이트한 후 딕셔너리에 저장
+        """ 종목코드를 company_info 테이블에 업데이트한 후 딕셔너리에 저장 """
 
         # company_info 테이블 읽기
         sql = "SELECT * FROM company_info"
@@ -96,7 +96,7 @@ class DBUpdater:
                 print('')
 
     def read_naver(self, code, company, pages_to_fetch):
-        # 네이버 금융에서 주식 시세를 읽어서 데이터프레임으로 반환
+        """ 네이버 금융에서 주식 시세를 읽어서 데이터프레임으로 반환 """
         try:
             url = f"http://finance.naver.com/item/sise_day.nhn?code={code}"
             html = BeautifulSoup(requests.get(url, headers={"user-agent": "Mozilla/5.0"}).text, "lxml")
@@ -116,7 +116,7 @@ class DBUpdater:
                 # 일별 시세 페이지를 읽고 데이터프레임에 추가
                 pg_url = '{}&page={}'.format(url, page)
                 df = df.append(pd.read_html(requests.get(pg_url,
-                    headers={'User-agent': 'Mozilla/5.0'}).text)[0])                                          
+                    headers={"User-agent": "Mozilla/5.0"}).text)[0])                                          
                 tmnow = datetime.now().strftime('%Y-%m-%d %H:%M')
                 print('[{}] {} ({}) : {:04d}/{:04d} pages are downloading...'.
                     format(tmnow, company, code, page, pages), end="\r")
@@ -137,7 +137,7 @@ class DBUpdater:
         return df
 
     def replace_into_db(self, df, num, code, company):
-        # 네이버 금융에서 읽어온 주식 시세를 DB에 REPLACE
+        """ 네이버 금융에서 읽어온 주식 시세를 DB에 REPLACE """
         with self.conn.cursor() as curs:
             # 인수로 받은 데이터프레임을 튜플로 순회해 daily_price 테이블 업데이트
             for r in df.itertuples():
@@ -148,7 +148,7 @@ class DBUpdater:
                 format(datetime.now().strftime('%Y-%m-%d %H:%M'), num+1, company, code, len(df)))
 
     def update_daily_price(self, pages_to_fetch):
-        # KRX 상장법인의 주식 시세를 네이버로부터 읽어서 DB에 업데이트
+        """ KRX 상장법인의 주식 시세를 네이버로부터 읽어서 DB에 업데이트 """
 
         # self.codes 딕셔너리에 저장된 모든 종목코드에 대해 순회해 데이터를 구하고 DB에 저장
         for idx, code in enumerate(self.codes):
@@ -158,7 +158,7 @@ class DBUpdater:
             self.replace_into_db(df, idx, code, self.codes[code])
 
     def execute_daily(self):
-        # 실행 즉시 및 매일 오후 다섯시에 daily_price 테이블 업데이트
+        """ 실행 즉시 및 매일 오후 다섯시에 daily_price 테이블 업데이트 """
 
         # 종목 코드 저장
         self.update_comp_info()
@@ -195,9 +195,5 @@ class DBUpdater:
         t.start()
 
 if __name__ == '__main__':
-    try:
-        dbu = DBUpdater()
-        dbu.execute_daily()
-    except Exception as ex:
-        print(ex)
-        a = input()
+    dbu = DBUpdater()
+    dbu.execute_daily()
