@@ -86,7 +86,7 @@ class MarketDB:
             print("ValueError: Code({}) doesn't exist.".format(code))
 
         # DB에서 일별 시세 반환
-        sql = f"SELECT * FROM daily_price WHERE code = '{code}' and date >= '{start_date}' or date <= '{end_date}'"
+        sql = f"SELECT * FROM daily_price WHERE code = '{code}' and date >= '{start_date}' and date <= '{end_date}'"
         df = pd.read_sql(sql, self.conn)
         df.index = df['date']
         return df

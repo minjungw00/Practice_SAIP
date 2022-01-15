@@ -8,7 +8,7 @@ mk = Analyzer.MarketDB()
 stocks = ['삼성전자', 'SK하이닉스', '현대자동차', 'NAVER']
 df = pd.DataFrame()
 for s in stocks:
-    df[s] = mk.get_daily_price(s, '2021-09-01', '2021-01-14')['close']
+    df[s] = mk.get_daily_price(s, '2021-09-01', '2022-01-14')['close']
 
 # 일간 변동룰, 연간 수익률, 일간 리스크(일간 변동률의 공분산), 연간 리스크, 252는 미국의 1년 평균 개장일
 daily_ret = df.pct_change()
